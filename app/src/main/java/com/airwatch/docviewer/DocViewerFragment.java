@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 
 
 /**
@@ -19,6 +20,8 @@ import android.view.ViewGroup;
  */
 public class DocViewerFragment extends Fragment {
 
+    private WebView mWebView;
+
     private OnFragmentInteractionListener mListener;
 
     public DocViewerFragment() {
@@ -29,7 +32,14 @@ public class DocViewerFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_blank, container, false);
+        return inflater.inflate(R.layout.fragment_doc_viewer, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view, savedInstanceState);
+        mWebView = (WebView) view.findViewById(R.id.main_webview);
+        mWebView.getSettings().setBuiltInZoomControls(true);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
