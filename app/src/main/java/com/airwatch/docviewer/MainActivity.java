@@ -45,6 +45,6 @@ public class MainActivity extends ActionBarActivity implements DocViewerFragment
 
     @Override
     public void onFragmentInteraction(Uri uri) {
-        
+
     }
 }

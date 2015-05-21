@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
+import android.widget.ListView;
 
 
 /**
@@ -21,6 +22,8 @@ import android.webkit.WebView;
 public class DocViewerFragment extends Fragment {
 
     private WebView mWebView;
+
+    private ListView mListView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -39,6 +42,7 @@ public class DocViewerFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
         mWebView = (WebView) view.findViewById(R.id.main_webview);
+        mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.getSettings().setBuiltInZoomControls(true);
     }
 
