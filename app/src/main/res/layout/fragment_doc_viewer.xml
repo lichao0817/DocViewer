@@ -1,13 +1,62 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context="com.airwatch.docviewer.DocViewerFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.airwatch.docviewer.DocViewerFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <WebView
         android:id="@+id/main_webview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <!--<ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                &lt;!&ndash;<ListView
+                    android:id="@+id/image_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:dividerHeight="1dp">
+
+                    </ListView>&ndash;&gt;
+                <ImageView
+                    android:id="@+id/image_item0"
+                    android:layout_width="match_parent"
+                    android:layout_height="600px"
+                    android:src="@drawable/images" />
+
+                <ImageView
+                    android:id="@+id/image_item1"
+                    android:layout_width="match_parent"
+                    android:layout_height="600px"
+                    android:src="@drawable/images" />
+
+                <ImageView
+                    android:id="@+id/image_item2"
+                    android:layout_width="match_parent"
+                    android:layout_height="600px"
+                    android:src="@drawable/images" />
+            </LinearLayout>
+        </ScrollView>-->
     </WebView>
+    <Button
+        android:id="@+id/button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="74dp"
+        android:layout_marginStart="74dp"
+        android:layout_marginBottom="74dp" />
 
 </RelativeLayout>
