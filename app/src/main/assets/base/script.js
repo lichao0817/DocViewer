@@ -1,3 +1,3 @@
 function hello(){
-                document.getElementById('demo').innerHTML = "Hello, world";
-            }
+    document.getElementById('demo').innerHTML = "Hello, world";
+}
