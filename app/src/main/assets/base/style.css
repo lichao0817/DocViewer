@@ -4,9 +4,16 @@
 body{
     margin: 2px;
 }
-div{
-}
-img{
-    height: auto;
+.pic_div{
     width: 100%;
+    height: 500px;
+    margin-bottom: 15px;
+    background: rgb( 255, 255, 255 )
+                url('images/loading.gif')
+                50% 50%
+                no-repeat;
+}
+.page_img{
+    width: 100%;
+    height: auto;
 }

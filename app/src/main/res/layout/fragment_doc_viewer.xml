@@ -10,46 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-        <!--<ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                &lt;!&ndash;<ListView
-                    android:id="@+id/image_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:dividerHeight="1dp">
-
-                    </ListView>&ndash;&gt;
-                <ImageView
-                    android:id="@+id/image_item0"
-                    android:layout_width="match_parent"
-                    android:layout_height="600px"
-                    android:src="@drawable/images" />
-
-                <ImageView
-                    android:id="@+id/image_item1"
-                    android:layout_width="match_parent"
-                    android:layout_height="600px"
-                    android:src="@drawable/images" />
-
-                <ImageView
-                    android:id="@+id/image_item2"
-                    android:layout_width="match_parent"
-                    android:layout_height="600px"
-                    android:src="@drawable/images" />
-            </LinearLayout>
-        </ScrollView>-->
     </WebView>
-    <Button
-        android:id="@+id/button"
+    <ImageButton
+        android:id="@+id/zoom_out_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
@@ -57,6 +20,34 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="74dp"
         android:layout_marginStart="74dp"
-        android:layout_marginBottom="74dp" />
+        android:layout_marginBottom="74dp"
+        android:drawableTop="@drawable/ic_trending_neutral_black_48dp"
+        />
+    <ImageButton
+        android:id="@+id/zoom_in_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:drawableTop="@drawable/ic_trending_neutral_black_48dp"
+        android:layout_alignTop="@+id/zoom_out_button"
+        android:layout_toRightOf="@+id/zoom_out_button"
+        android:layout_toEndOf="@+id/zoom_out_button" />
+
+    <ImageButton
+        android:id="@+id/fit_to_width_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/zoom_in_button"
+        android:layout_toRightOf="@+id/zoom_in_button"
+        android:layout_toEndOf="@+id/zoom_in_button" />
+
+    <EditText
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/page_number"
+        android:layout_above="@+id/zoom_out_button"
+        android:layout_alignLeft="@+id/zoom_out_button"
+        android:layout_alignStart="@+id/zoom_out_button" />
 
 </RelativeLayout>

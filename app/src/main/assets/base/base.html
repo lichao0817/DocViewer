@@ -2,16 +2,15 @@
 <html>
 <head>
     <link rel="stylesheet" href="style.css"/>
-    <script language="JavaScript" src="script.js">
-    </script>
+    <script src="lib/jquery-2.1.4.min.js"></script>
+    <script src="lib/jquery.visible.js"></script>
+    <script language="JavaScript" src="script.js"></script>
 </head>
-<body bgcolor="#9C9C9C">
-<div id="frame">
-    <div><img src='images/images.jpeg'/></div>
-    <div><img src='images/images.jpeg'/></div>
-    <div><img src='images/images.jpeg'/></div>
-    <div><img src='images/images.jpeg'/></div>
-    <div><p id="demo"></p></div>
+<body bgcolor="#9C9C9C" onscroll="onScroll()">
+<div id="frame" onscroll="onScroll()">
+    <script>
+        addAllPages();
+    </script>
 </div>
 </body>
 </html>

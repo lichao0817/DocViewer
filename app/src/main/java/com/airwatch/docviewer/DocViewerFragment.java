@@ -1,25 +1,21 @@
 package com.airwatch.docviewer;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.util.Log;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.ImageButton;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.airwatch.Filter.PageInputFilter;
+import com.airwatch.interfaces.JsInterface;
 
 
 /**
@@ -33,6 +29,10 @@ import java.util.List;
 public class DocViewerFragment extends Fragment {
 
     private WebView mWebView;
+    private ImageButton mZoomInButton;
+    private ImageButton mZoomOutButton;
+    private ImageButton mFitToWidthButton;
+    private EditText mPageEditText;
 
     private OnFragmentInteractionListener mListener;
 
@@ -57,12 +57,55 @@ public class DocViewerFragment extends Fragment {
         mWebView.getSettings().setDisplayZoomControls(false);
 
         mWebView.loadUrl("file:///android_asset/base/base.html");
-        Button mButton = (Button) view.findViewById(R.id.button);
-        mButton.setOnClickListener(new Button.OnClickListener() {
-            public void onClick(View v) {
-                mWebView.loadUrl("javascript:hello()");
+        setUpButtons(view);
+    }
+
+    public void setUpButtons(View view){
+        mWebView.addJavascriptInterface(new JsInterface(getActivity()), "Android");
+        mZoomInButton = (ImageButton) view.findViewById(R.id.zoom_in_button);
+        mZoomInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mWebView.zoomIn();
             }
         });
+        mZoomOutButton = (ImageButton) view.findViewById(R.id.zoom_out_button);
+        mZoomOutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mWebView.zoomOut();
+            }
+        });
+        mFitToWidthButton = (ImageButton) view.findViewById(R.id.fit_to_width_button);
+        mFitToWidthButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                mWebView.loadUrl("javascript:fitToWidth()");
+                for (int i = 0; i < 10; i ++){
+                    mWebView.zoomOut();
+                }
+            }
+        });
+        mPageEditText = (EditText) view.findViewById(R.id.page_number);
+        //TODO: Should read the total page number here
+        mPageEditText.setFilters(new InputFilter[]{ new PageInputFilter("1", "8")});
+        mPageEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mWebView.loadUrl("javascript:goToPage("+ editable.toString() +")");
+            }
+        });
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
