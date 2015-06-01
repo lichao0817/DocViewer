@@ -6,8 +6,9 @@ body{
 }
 .pic_div{
     width: 100%;
-    height: 500px;
     margin-bottom: 15px;
+    border: 0;
+    padding: 0;
     background: rgb( 255, 255, 255 )
                 url('images/loading.gif')
                 50% 50%

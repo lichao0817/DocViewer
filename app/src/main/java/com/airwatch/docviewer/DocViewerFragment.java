@@ -32,6 +32,7 @@ public class DocViewerFragment extends Fragment {
     private ImageButton mZoomInButton;
     private ImageButton mZoomOutButton;
     private ImageButton mFitToWidthButton;
+    private ImageButton mFitToPageButton;
     private EditText mPageEditText;
 
     private OnFragmentInteractionListener mListener;
@@ -84,6 +85,13 @@ public class DocViewerFragment extends Fragment {
                 for (int i = 0; i < 10; i ++){
                     mWebView.zoomOut();
                 }
+            }
+        });
+        mFitToPageButton = (ImageButton) view.findViewById(R.id.fit_to_page_button);
+        mFitToPageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view){
+                mWebView.loadUrl("javascript:fitToPage()");
             }
         });
         mPageEditText = (EditText) view.findViewById(R.id.page_number);

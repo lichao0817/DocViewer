@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context="com.airwatch.docviewer.DocViewerFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <WebView
         android:id="@+id/main_webview"
         android:layout_width="match_parent"
@@ -39,6 +38,14 @@
         android:layout_alignTop="@+id/zoom_in_button"
         android:layout_toRightOf="@+id/zoom_in_button"
         android:layout_toEndOf="@+id/zoom_in_button" />
+
+    <ImageButton
+        android:id="@+id/fit_to_page_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignTop="@+id/fit_to_width_button"
+        android:layout_toRightOf="@+id/fit_to_width_button"
+        android:layout_toEndOf="@+id/fit_to_width_button" />
 
     <EditText
         android:layout_width="80dp"

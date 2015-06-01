@@ -1,6 +1,8 @@
 var currentPage;
 var pageCount;
 var log_id;
+var toWidth;
+var toPage;
 const LOAD_SIZE = 1;
 
 function addAllPages(){
@@ -8,11 +10,32 @@ function addAllPages(){
         addImageFrame();
     }
     rmBottomMargin();
+    goToPage(1);
 }
 
 function fitToWidth() {
-    $('.doc_page').css('width', '100%');
-    $('.doc_page').css('height', 'auto');
+    $('.pic_div').css('width', '100%');
+    $('.page_img').css('width', '100%');
+    $('.page_img').css('height', 'auto');
+    $('.pic_div').css('height', $('.page_img').css('height'));
+    toWidth = true;
+    toPage = false;
+}
+
+function fitToPage(){
+    $('.page_img').css('height', $(window).height());
+    $('.page_img').css('width', 'auto');
+    $('.pic_div').css('width', $('.page_img').css('width'));
+    $('.pic_div').css('height', $('.page_img').css('height'));
+    $('.pic_div').css('margin-left', 'auto');
+    $('.pic_div').css('margin-right', 'auto');
+    toPage = true;
+    toWidth = false;
+}
+
+function rmBackground(pageNumber){
+    var image_div = $('#page_' + pageNumber);
+    image_div.css('background-image', 'none');
 }
 
 function rmBottomMargin(){
@@ -30,6 +53,12 @@ function onScroll(){
             var pageNumber = parseInt(pageString.replace('page_', ''));
             if (pageNumber !== currentPage){
                 updatePageNumber(pageNumber);
+                if (toPage){
+                    fitToPage();
+                }
+                if (toWidth){
+                    fitToWidth();
+                }
             }
         }
     });
@@ -59,8 +88,15 @@ function changeImage(pageNumber){
         setTimeout(function(){
             image_div.css('width', 'auto');
             image_div.css('height', 'auto');
+            image_div.css('background-image', 'none');
             img.attr('src', 'images/'+ prefix + pageNumber + '.jpg');
         }, 1500);
+        if (toWidth){
+            fitToWidth();
+        }
+        if (toPage){
+            fitToPage();
+        }
     }
 }
 
@@ -86,5 +122,4 @@ function loadMorePages(){
     for (var i = start; i <= end; i++){
         changeImage(i);
     }
-    return [start, end];
 }
