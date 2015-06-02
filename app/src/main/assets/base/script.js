@@ -13,6 +13,10 @@ function addAllPages(){
     goToPage(1);
 }
 
+function setBgColor(color){
+    $('body').css('background-color', color);
+}
+
 function fitToWidth() {
     $('.pic_div').css('width', '100%');
     $('.page_img').css('width', '100%');
@@ -46,29 +50,33 @@ function onScroll(){
     if (!currentPage){
         currentPage = 1;
     }
+    var pageNumber = 0;
     $('.pic_div').each(function(){
         var visible = $(this).visible(true);
         if (visible){
             var pageString = this.id;
-            var pageNumber = parseInt(pageString.replace('page_', ''));
-            if (pageNumber !== currentPage){
-                updatePageNumber(pageNumber);
-                if (toPage){
-                    fitToPage();
-                }
-                if (toWidth){
-                    fitToWidth();
-                }
+            var number = parseInt(pageString.replace('page_', ''));
+            if (number > pageNumber){
+                pageNumber = number;
             }
         }
     });
+    if (pageNumber != currentPage){
+        updatePageNumber(pageNumber);
+            if (toPage){
+                fitToPage();
+            }
+            if (toWidth){
+                fitToWidth();
+            }
+    }
 }
 
 function goToPage(pageNumber){
     if (pageNumber >= 1 && pageNumber <= pageCount){
         $('html, body').animate({
             scrollTop: ($('#page_' + pageNumber).offset().top)
-        }, 500);
+        }, 100);
         updatePageNumber(pageNumber);
     }
 }
@@ -77,6 +85,7 @@ function updatePageNumber(pageNumber){
     if (currentPage !== pageNumber){
         currentPage = pageNumber;
         loadMorePages();
+        Android.updatePageNumber(currentPage);
     }
 }
 
@@ -122,4 +131,18 @@ function loadMorePages(){
     for (var i = start; i <= end; i++){
         changeImage(i);
     }
+}
+
+function clearPages(){
+    $('.pic_div').remove();
+    pageCount = 0;
+    currentPage = 0;
+}
+
+function nextPage(){
+    goToPage(currentPage + 1);
+}
+
+function prevPage(){
+    goToPage(currentPage - 1);
 }

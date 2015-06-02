@@ -1,21 +1,29 @@
 package com.airwatch.docviewer;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.airwatch.Filter.PageInputFilter;
-import com.airwatch.interfaces.JsInterface;
+import com.airwatch.interfaces.PageEditJsInterface;
+import com.airwatch.interfaces.ToolbarJsInterface;
 
 
 /**
@@ -33,7 +41,11 @@ public class DocViewerFragment extends Fragment {
     private ImageButton mZoomOutButton;
     private ImageButton mFitToWidthButton;
     private ImageButton mFitToPageButton;
-    private EditText mPageEditText;
+    private ImageButton mPrevPageButton;
+    private ImageButton mNextPageButton;
+    private TextView mPageEditText;
+    private Toolbar mToolbar;
+    private int pageCount;
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,7 +74,19 @@ public class DocViewerFragment extends Fragment {
     }
 
     public void setUpButtons(View view){
-        mWebView.addJavascriptInterface(new JsInterface(getActivity()), "Android");
+        mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
+        mWebView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int visible = mToolbar.getVisibility();
+                if (visible == View.VISIBLE){
+                    mToolbar.setVisibility(View.GONE);
+                }
+                else{
+                    mToolbar.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         mZoomInButton = (ImageButton) view.findViewById(R.id.zoom_in_button);
         mZoomInButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,26 +118,65 @@ public class DocViewerFragment extends Fragment {
                 mWebView.loadUrl("javascript:fitToPage()");
             }
         });
-        mPageEditText = (EditText) view.findViewById(R.id.page_number);
-        //TODO: Should read the total page number here
-        mPageEditText.setFilters(new InputFilter[]{ new PageInputFilter("1", "8")});
-        mPageEditText.addTextChangedListener(new TextWatcher() {
+        mPrevPageButton = (ImageButton) view.findViewById(R.id.prev_page_button);
+        mPrevPageButton.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                mWebView.loadUrl("javascript:goToPage("+ editable.toString() +")");
+            public void onClick(View view) {
+                mWebView.loadUrl("javascript:prevPage()");
             }
         });
+        mNextPageButton = (ImageButton) view.findViewById(R.id.next_page_button);
+        mNextPageButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                mWebView.loadUrl("javascript:nextPage()");
+            }
+        });
+        mPageEditText = (TextView) view.findViewById(R.id.page_number);
+        mPageEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setTitle("Go To Page");
+                final EditText input = new EditText(getActivity());
+                input.setFilters(new PageInputFilter[]{new PageInputFilter(1, 8)});
+                input.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(input);
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        mWebView.loadUrl("javascript:goToPage(" + input.getText().toString() + ")");
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
 
+                builder.show();
+            }
+        });
+        //TODO: Should read the total page number here
+        //mPageEditText.setFilters(new InputFilter[]{new PageInputFilter("1", "8")});
+        mWebView.addJavascriptInterface(new PageEditJsInterface(mPageEditText, 8), "Android");
+        mWebView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                int visibility = mToolbar.getVisibility();
+                if ( motionEvent.getAction() == MotionEvent.ACTION_UP ){
+                    if (visibility == View.VISIBLE ||
+                            motionEvent.getAction() == MotionEvent.ACTION_SCROLL){
+                        mToolbar.setVisibility(View.GONE);
+                    }
+                    else {
+                        mToolbar.setVisibility(View.VISIBLE);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

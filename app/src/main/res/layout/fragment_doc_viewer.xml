@@ -8,53 +8,75 @@
         android:id="@+id/main_webview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-    </WebView>
-    <ImageButton
-        android:id="@+id/zoom_out_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:orientation="vertical"></WebView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginLeft="74dp"
-        android:layout_marginStart="74dp"
-        android:layout_marginBottom="74dp"
-        android:drawableTop="@drawable/ic_trending_neutral_black_48dp"
-        />
-    <ImageButton
-        android:id="@+id/zoom_in_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:drawableTop="@drawable/ic_trending_neutral_black_48dp"
-        android:layout_alignTop="@+id/zoom_out_button"
-        android:layout_toRightOf="@+id/zoom_out_button"
-        android:layout_toEndOf="@+id/zoom_out_button" />
+        android:background="#2196F3"
+        android:minHeight="?attr/actionBarSize">
 
-    <ImageButton
-        android:id="@+id/fit_to_width_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/zoom_in_button"
-        android:layout_toRightOf="@+id/zoom_in_button"
-        android:layout_toEndOf="@+id/zoom_in_button" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:minHeight="?attr/actionBarSize">
 
-    <ImageButton
-        android:id="@+id/fit_to_page_button"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignTop="@+id/fit_to_width_button"
-        android:layout_toRightOf="@+id/fit_to_width_button"
-        android:layout_toEndOf="@+id/fit_to_width_button" />
+            <ImageButton
+                android:id="@+id/zoom_out_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_zoom_out"
+                android:clickable="true" />
 
-    <EditText
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/page_number"
-        android:layout_above="@+id/zoom_out_button"
-        android:layout_alignLeft="@+id/zoom_out_button"
-        android:layout_alignStart="@+id/zoom_out_button" />
+            <ImageButton
+                android:id="@+id/zoom_in_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_zoom_in"
+                android:clickable="true" />
+
+            <ImageButton
+                android:id="@+id/prev_page_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_left_arrow"
+                android:clickable="true" />
+
+            <TextView
+                android:id="@+id/page_number"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:clickable="true"
+                android:ems="20"/>
+
+            <ImageButton
+                android:id="@+id/next_page_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_right_arrow"
+                android:clickable="true" />
+
+            <ImageButton
+                android:id="@+id/fit_to_page_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_fit_page"
+                android:clickable="true" />
+
+            <ImageButton
+                android:id="@+id/fit_to_width_button"
+                android:layout_width="@dimen/button_width"
+                android:layout_height="match_parent"
+                android:background="@drawable/button_fit_width"
+                android:clickable="true" />
+        </LinearLayout>
+
+    </android.support.v7.widget.Toolbar>
 
 </RelativeLayout>
