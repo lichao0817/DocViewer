@@ -1,29 +1,20 @@
 package com.airwatch.docviewer;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.airwatch.Buttons.ControlImageButton;
 import com.airwatch.Filter.PageInputFilter;
-import com.airwatch.interfaces.PageEditJsInterface;
-import com.airwatch.interfaces.ToolbarJsInterface;
+import com.airwatch.View.PageViewer;
+import com.airwatch.JsInterfaces.PageTextJsInterface;
+import com.airwatch.Utils.ButtonUtils;
 
 
 /**
@@ -36,16 +27,19 @@ import com.airwatch.interfaces.ToolbarJsInterface;
  */
 public class DocViewerFragment extends Fragment {
 
-    private WebView mWebView;
-    private ImageButton mZoomInButton;
-    private ImageButton mZoomOutButton;
-    private ImageButton mFitToWidthButton;
-    private ImageButton mFitToPageButton;
-    private ImageButton mPrevPageButton;
-    private ImageButton mNextPageButton;
-    private TextView mPageEditText;
+    private PageViewer mPageViewer;
+    private ControlImageButton mZoomInButton;
+    private ControlImageButton mZoomOutButton;
+    private ControlImageButton mFitToWidthButton;
+    private ControlImageButton mFitToPageButton;
+    private ControlImageButton mPrevPageButton;
+    private ControlImageButton mNextPageButton;
+    private TextView mPageText;
     private Toolbar mToolbar;
-    private int pageCount;
+    private PageTextJsInterface mPageTextJsInterface;
+    private int pageCount = 8;
+    private int lastVisitPage = 0;
+    private final String LAST_VISIT_PAGE = "last_visit_page";
 
     private OnFragmentInteractionListener mListener;
 
@@ -63,120 +57,32 @@ public class DocViewerFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view, savedInstanceState);
-        mWebView = (WebView) view.findViewById(R.id.main_webview);
-        mWebView.setVerticalScrollBarEnabled(true);
-        mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.getSettings().setBuiltInZoomControls(true);
-        mWebView.getSettings().setDisplayZoomControls(false);
-
-        mWebView.loadUrl("file:///android_asset/base/base.html");
+        mPageViewer = (PageViewer) view.findViewById(R.id.main_page_viewer);
         setUpButtons(view);
     }
 
     public void setUpButtons(View view){
+        // Refrence to all the buttons
         mToolbar = (Toolbar) view.findViewById(R.id.toolbar);
-        mWebView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int visible = mToolbar.getVisibility();
-                if (visible == View.VISIBLE){
-                    mToolbar.setVisibility(View.GONE);
-                }
-                else{
-                    mToolbar.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-        mZoomInButton = (ImageButton) view.findViewById(R.id.zoom_in_button);
-        mZoomInButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mWebView.zoomIn();
-            }
-        });
-        mZoomOutButton = (ImageButton) view.findViewById(R.id.zoom_out_button);
-        mZoomOutButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mWebView.zoomOut();
-            }
-        });
-        mFitToWidthButton = (ImageButton) view.findViewById(R.id.fit_to_width_button);
-        mFitToWidthButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                mWebView.loadUrl("javascript:fitToWidth()");
-                for (int i = 0; i < 10; i ++){
-                    mWebView.zoomOut();
-                }
-            }
-        });
-        mFitToPageButton = (ImageButton) view.findViewById(R.id.fit_to_page_button);
-        mFitToPageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view){
-                mWebView.loadUrl("javascript:fitToPage()");
-            }
-        });
-        mPrevPageButton = (ImageButton) view.findViewById(R.id.prev_page_button);
-        mPrevPageButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                mWebView.loadUrl("javascript:prevPage()");
-            }
-        });
-        mNextPageButton = (ImageButton) view.findViewById(R.id.next_page_button);
-        mNextPageButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                mWebView.loadUrl("javascript:nextPage()");
-            }
-        });
-        mPageEditText = (TextView) view.findViewById(R.id.page_number);
-        mPageEditText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Go To Page");
-                final EditText input = new EditText(getActivity());
-                input.setFilters(new PageInputFilter[]{new PageInputFilter(1, 8)});
-                input.setInputType(InputType.TYPE_CLASS_NUMBER);
-                builder.setView(input);
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        mWebView.loadUrl("javascript:goToPage(" + input.getText().toString() + ")");
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.cancel();
-                    }
-                });
+        mZoomInButton = (ControlImageButton) view.findViewById(R.id.zoom_in_button);
+        mZoomOutButton = (ControlImageButton) view.findViewById(R.id.zoom_out_button);
+        mFitToWidthButton = (ControlImageButton) view.findViewById(R.id.fit_to_width_button);
+        mFitToPageButton = (ControlImageButton) view.findViewById(R.id.fit_to_page_button);
+        mPrevPageButton = (ControlImageButton) view.findViewById(R.id.prev_page_button);
+        mNextPageButton = (ControlImageButton) view.findViewById(R.id.next_page_button);
+        mPageText = (TextView) view.findViewById(R.id.page_number);
+        // Set up buttons and tool bar
+        ButtonUtils.setupZoomInButton(mZoomInButton, mPageViewer);
+        ButtonUtils.setupZoomOutButton(mZoomOutButton, mPageViewer);
+        ButtonUtils.setupFitToWidthButton(mFitToWidthButton, mFitToPageButton, mPageViewer);
+        ButtonUtils.setupFitToPageButton(mFitToPageButton, mFitToWidthButton, mPageViewer);
+        ButtonUtils.setupPrevPageButton(mPrevPageButton, mPageViewer);
+        ButtonUtils.setupNextPageButton(mNextPageButton, mPageViewer);
+        ButtonUtils.setupPageText(mPageText, mPageViewer, getActivity(), new PageInputFilter(pageCount));
+        ButtonUtils.setupToolbar(mToolbar, mPageViewer);
+        mPageTextJsInterface = new PageTextJsInterface(mPageText, pageCount);
+        mPageViewer.addJavascriptInterface(mPageTextJsInterface, "Android");
 
-                builder.show();
-            }
-        });
-        //TODO: Should read the total page number here
-        //mPageEditText.setFilters(new InputFilter[]{new PageInputFilter("1", "8")});
-        mWebView.addJavascriptInterface(new PageEditJsInterface(mPageEditText, 8), "Android");
-        mWebView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                int visibility = mToolbar.getVisibility();
-                if ( motionEvent.getAction() == MotionEvent.ACTION_UP ){
-                    if (visibility == View.VISIBLE ||
-                            motionEvent.getAction() == MotionEvent.ACTION_SCROLL){
-                        mToolbar.setVisibility(View.GONE);
-                    }
-                    else {
-                        mToolbar.setVisibility(View.VISIBLE);
-                    }
-                }
-                return false;
-            }
-        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -184,6 +90,12 @@ public class DocViewerFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(LAST_VISIT_PAGE, mPageTextJsInterface.getCurrentPageNumber());
     }
 
     @Override

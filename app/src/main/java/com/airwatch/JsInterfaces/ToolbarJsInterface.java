@@ -1,4 +1,4 @@
-package com.airwatch.interfaces;
+package com.airwatch.JsInterfaces;
 
 import android.support.v7.widget.Toolbar;
 import android.view.View;

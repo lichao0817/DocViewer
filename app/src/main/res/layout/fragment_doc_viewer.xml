@@ -4,11 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.airwatch.docviewer.DocViewerFragment">
 
-    <WebView
-        android:id="@+id/main_webview"
+    <com.airwatch.View.PageViewer
+        android:id="@+id/main_page_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"></WebView>
+        android:orientation="vertical"></com.airwatch.View.PageViewer>
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -17,7 +17,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="#2196F3"
+        android:background="@color/AWBlue"
         android:minHeight="?attr/actionBarSize">
 
         <LinearLayout
@@ -26,25 +26,28 @@
             android:gravity="center"
             android:minHeight="?attr/actionBarSize">
 
-            <ImageButton
+            <com.airwatch.Buttons.ControlImageButton
                 android:id="@+id/zoom_out_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_zoom_out"
+                android:src="@drawable/button_zoom_out"
+                android:background="@color/AWBlue"
                 android:clickable="true" />
 
-            <ImageButton
+            <com.airwatch.Buttons.ControlImageButton
                 android:id="@+id/zoom_in_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_zoom_in"
+                android:src="@drawable/button_zoom_in"
+                android:background="@color/AWBlue"
                 android:clickable="true" />
 
-            <ImageButton
+            <com.airwatch.Buttons.ControlImageButton
                 android:id="@+id/prev_page_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_left_arrow"
+                android:src="@drawable/button_left_arrow"
+                android:background="@color/AWBlue"
                 android:clickable="true" />
 
             <TextView
@@ -55,25 +58,28 @@
                 android:clickable="true"
                 android:ems="20"/>
 
-            <ImageButton
+            <com.airwatch.Buttons.ControlImageButton
                 android:id="@+id/next_page_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_right_arrow"
+                android:src="@drawable/button_right_arrow"
+                android:background="@color/AWBlue"
                 android:clickable="true" />
 
-            <ImageButton
+            <com.airwatch.Buttons.ControlImageButton
                 android:id="@+id/fit_to_page_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_fit_page"
+                android:src="@drawable/button_fit_page"
+                android:background="@color/AWBlue"
                 android:clickable="true" />
 
-            <ImageButton
+            <com.airwatch.Buttons.ControlImageButton
                 android:id="@+id/fit_to_width_button"
                 android:layout_width="@dimen/button_width"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_fit_width"
+                android:src="@drawable/button_fit_width"
+                android:background="@color/AWBlue"
                 android:clickable="true" />
         </LinearLayout>
 
